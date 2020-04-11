@@ -14,20 +14,19 @@ contract GameFactory {
     }
 }
 
-//TODO: Cancelled
 contract Game{
     // title for coin flip instance
     string title;
     // money being bet
     uint value;
     // address of first player
-    address public player1;
+    address player1;
     // address of second player
-    address public player2;
+    address player2;
     // whether coin has been flipped
-    bool completed;
+    bool public isCompleted;
     // if a player has cancelled
-    bool public cancelled;
+    bool public isCancelled;
     // number of yes votes
     uint readyCount;
     // each approver's vote on the request
@@ -50,7 +49,7 @@ contract Game{
         value = _value;
         player1 = creator;
         playersCount = 1;
-        cancelled = false;
+        isCancelled = false;
     }
     
     modifier restricted(){
@@ -61,7 +60,7 @@ contract Game{
     // add player2 to game
     function bet() public payable{
         require(playersCount == 1);
-        require(!cancelled);
+        require(!isCancelled);
         require(msg.value == value);
         player2 = msg.sender;
         playersCount++;
@@ -69,7 +68,7 @@ contract Game{
     
     // allow player to cancel input into game
     function cancel() public restricted{
-        require(!completed && !cancelled);
+        require(!isCompleted && !isCancelled);
         
         if(playersCount == 2){
             player1.transfer(address(this).balance / 2);
@@ -77,35 +76,31 @@ contract Game{
         }
         else
             player1.transfer(address(this).balance);
-        cancelled = true;
+        isCancelled = true;
     }
     
     // player must be ready for game as a double check of flipping the coin
     function ready() public restricted{
-        require(!completed && !cancelled);
+        require(!isCompleted && !isCancelled);
         require(!playersReady[msg.sender]);
         
         playersReady[msg.sender] = true;
         readyCount++;
     }
     
-    // button to lead to coin flip
-    function beginCompletion() public view restricted{
-        require(readyCount == 2);
-        require(!completed && !cancelled);
-    }
-    
     // occurs after player chooses a side of the coin
-    function chooseSide(bool _choseHeads) public{
+    function chooseSide(bool _choseHeads) public restricted{
+        require(readyCount == 2);
+        require(!isCompleted && !isCancelled);
         flipPlayer = msg.sender;
         choseHeads = _choseHeads;
+        isCompleted = true;
         // coin flip occurs here in js, setting landedSide
     }
     
     // occurs after coin is flipped and finalizes the game
     function coinFlip(bool _landedHeads) public{
         landedHeads = _landedHeads;
-        completed = true;
         if(landedHeads == choseHeads){
             flipPlayer.transfer(address(this).balance);
             winner = flipPlayer;
@@ -122,14 +117,18 @@ contract Game{
     }
     
     function getSummary() public view returns (
-        uint, address, address, bool, uint, address
+        string, uint, address, address, uint, uint, address, bool, bool, address
     ) {
         return (
-            address(this).balance, 
-            player1, 
+            title,
+            value,
+            player1,
             player2,
-            completed,
+            readyCount,
             playersCount,
+            flipPlayer,
+            choseHeads,
+            landedHeads,
             winner
         );
     }

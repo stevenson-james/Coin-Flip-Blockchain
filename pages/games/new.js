@@ -17,7 +17,8 @@ class GameNew extends Component {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
         try {
-            if (!this.state.gameTitle.match(/^[A-Za-z0-9]+(\s[[A-Za-z0-9])*$/)){
+            // only allow collections of letters, numbers, and underscores, separated by spaces
+            if (!this.state.gameTitle.match(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/)){
                 throw 'Must include a title (no special characters)';
             }
             const accounts = await web3.eth.getAccounts();
