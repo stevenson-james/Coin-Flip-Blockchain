@@ -5,6 +5,9 @@ import Layout from '../../components/Layout';
 import Game from '../../ethereum/game';
 import web3 from '../../ethereum/web3';
 import { Link } from '../../routes';
+import JoinButton from '../../components/JoinButton';
+import ReadyButton from '../../components/ReadyButton'
+import CancelButton from '../../components/CancelButton';
 
 class GameShow extends Component {
     static async getInitialProps(props) {
@@ -115,50 +118,7 @@ class GameShow extends Component {
 
         return < Card.Group items={items} />;
     }
-
-    onJoin = async (event) => {
-        event.preventDefault();
-        this.setState({ loading: true, errorMessage: '' });
-        try {
-            const accounts = await web3.eth.getAccounts();
-            await this.props.game.methods.bet().send({
-                from: accounts[0],
-                value: this.props.value
-            });
-        }
-        catch (err) {
-            this.setState({ errorMessage: err.message });
-        }
-    }
-
-    onCancel = async (event) => {
-        event.preventDefault();
-        this.setState({ loading: true, errorMessage: '' });
-        try {
-            const accounts = await web3.eth.getAccounts();
-            await this.props.game.methods.cancel().send({
-                from: accounts[0]
-            });
-        }
-        catch (err) {
-            this.setState({ errorMessage: err.message });
-        }
-    }
-
-    onReady = async (event) => {
-        event.preventDefault();
-        this.setState({ loading: true, errorMessage: '' });
-        try {
-            const accounts = await web3.eth.getAccounts();
-            await this.props.game.methods.ready().send({
-                from: accounts[0]
-            });
-        }
-        catch (err) {
-            this.setState({ errorMessage: err.message });
-        }
-    }
-
+    
     render() {
         return (
             <Layout>
@@ -171,16 +131,6 @@ class GameShow extends Component {
 
                         <Grid.Column width={6}>
                             <Grid.Row>
-                                <Button primary onClick={ this.onJoin }> Join the Game!</Button>
-                                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
-                                <Button primary onClick={ this.onReady }> Ready Up!</Button>
-                                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
                                 <Link route={`/games/${this.props.address}/flipcoin`}>
                                     <a>
                                         <Button primary>Flip the Coin!</Button>
@@ -189,8 +139,7 @@ class GameShow extends Component {
                             </Grid.Row>
                             <br />
                             <Grid.Row>
-                                <Button primary onClick={ this.onCancel }> Cancel Game... </Button>
-                                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
+                                <CancelButton game={ this.props.game} web3={ web3 } />
                             </Grid.Row>
                             <br />
                             <Grid.Row>
@@ -199,6 +148,14 @@ class GameShow extends Component {
                                         <Button primary>Back</Button>
                                     </a>
                                 </Link>
+                            </Grid.Row>
+                            <br />
+                            <Grid.Row>
+                                <JoinButton value={this.props.value} game={ this.props.game} web3={ web3 } />
+                            </Grid.Row>
+                            <br />
+                            <Grid.Row>
+                                <ReadyButton game={ this.props.game} web3={ web3 } />
                             </Grid.Row>
                         </Grid.Column>
                     </Grid.Row>
