@@ -8,7 +8,9 @@ class JoinButton extends Component {
     static async getInitialProps(props) {
         return{
             game: props.game,
-            web3: props.web3
+            web3: props.web3,
+            Router: props.Router,
+            address: props.address
         }
     }
 
@@ -17,6 +19,7 @@ class JoinButton extends Component {
         loading: false
     };
 
+    // TODO: fix link
     onJoin = async (event) => {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
@@ -27,6 +30,7 @@ class JoinButton extends Component {
                 value: this.props.value
             });
             this.setState({ loading: false });
+            this.props.Router.pushRoute(`/games/${this.props.address}`);
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });

@@ -89,17 +89,12 @@ contract Game{
     }
     
     // occurs after player chooses a side of the coin
-    function chooseSide(bool _choseHeads) public restricted{
+    function coinFlip(bool _choseHeads, bool _landedHeads) public restricted{
         require(readyCount == 2);
         require(!isCompleted && !isCancelled);
         flipPlayer = msg.sender;
         choseHeads = _choseHeads;
-        isCompleted = true;
         // coin flip occurs here in js, setting landedSide
-    }
-    
-    // occurs after coin is flipped and finalizes the game
-    function coinFlip(bool _landedHeads) public{
         landedHeads = _landedHeads;
         if(landedHeads == choseHeads){
             flipPlayer.transfer(address(this).balance);
@@ -114,6 +109,7 @@ contract Game{
                 player1.transfer(address(this).balance);
                 winner = player1;
             }
+        isCompleted = true;
     }
     
     function getSummary() public view returns (

@@ -4,7 +4,7 @@ import Layout from '../../components/Layout';
 // technically an instance of campaign
 import Game from '../../ethereum/game';
 import web3 from '../../ethereum/web3';
-import { Link } from '../../routes';
+import { Link, Router } from '../../routes';
 import JoinButton from '../../components/JoinButton';
 import ReadyButton from '../../components/ReadyButton'
 import CancelButton from '../../components/CancelButton';
@@ -83,8 +83,8 @@ class GameShow extends Component {
                 style: { overflowWrap: 'break-word' }
             });
         items.push({
-                header: web3.utils.fromWei(value, 'ether'),
-                meta: 'Betting Amount (ether)',
+                header: web3.utils.fromWei(value, 'ether') + ' ether',
+                meta: 'Betting Amount',
                 description: 'Amount each player must/has bet on the coin flip and ' +
                     'amount to be won',
             });
@@ -103,7 +103,7 @@ class GameShow extends Component {
             style: { overflowWrap: 'break-word' }
         },
         {
-            header: chosenValue + '/' + landedValue,
+            header: chosenValue + ' / ' + landedValue,
             meta: 'Chosen Face / Landed Face',
             description: 'First face is the face called by the player, the second ' +
                 'face is the result of the coin flip',
@@ -151,11 +151,16 @@ class GameShow extends Component {
                             </Grid.Row>
                             <br />
                             <Grid.Row>
-                                <JoinButton value={this.props.value} game={ this.props.game} web3={ web3 } />
+                                <JoinButton 
+                                    game={ this.props.game }
+                                    value={this.props.value} 
+                                    address={this.props.address} 
+                                    web3={ web3 } 
+                                    Router={ Router } />
                             </Grid.Row>
                             <br />
                             <Grid.Row>
-                                <ReadyButton game={ this.props.game} web3={ web3 } />
+                                <ReadyButton game={ this.props.game } web3={ web3 } />
                             </Grid.Row>
                         </Grid.Column>
                     </Grid.Row>

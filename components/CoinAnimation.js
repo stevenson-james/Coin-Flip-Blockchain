@@ -12,11 +12,11 @@ class CoinAnimation extends Component {
     render() {
         return (
             <div>
-                {this.props.face === 'heads' && <div className="coin animate-heads">
+                {this.props.face === 'Heads' && <div className="coin animate-heads">
                     <div className="heads" />
                     <div className="tails" />    
                 </div>}
-                {this.props.face === 'tails' && <div className="coin animate-tails">
+                {this.props.face === 'Tails' && <div className="coin animate-tails">
                     <div className="heads" />
                     <div className="tails" />    
                 </div>}

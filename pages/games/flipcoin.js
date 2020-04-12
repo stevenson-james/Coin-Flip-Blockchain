@@ -31,39 +31,25 @@ class Flip extends Component {
         loading: false
     };
 
-    async onChoose (isHeads) {
+    async onChoose (isChosenHeads) {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
         try {
             const accounts = await web3.eth.getAccounts();
-            await this.props.game.methods.chooseSide(isHeads).send({
+            // randomNum between 0 and 1
+            const randomNum = Math.random();
+            const isLandedHeads = randomNum > .5;
+
+            await this.props.game.methods.coinFlip(isChosenHeads, isLandedHeads).send({
                 from: accounts[0]
             });
-            if (isHeads)
+            this.setState({ isChosen: true });
+            if (isChosenHeads)
                 this.setState({ calledFace: 'Heads' });
             else
                 this.setState({ calledFace: 'Tails' }); 
-            this.setState({ isChosen: true });
-        }
-        catch (err) {
-            this.setState({ errorMessage: err.message });
-        }
-    }
 
-    //TODO: fix async problem
-    /*
-    async flipCoin() {
-        this.setState({ loading: true, errorMessage: '' });
-        // randomNum between 0 and 1
-        const randomNum = Math.random();
-        const isHeads = randomNum > .5;
-        try {
-            const accounts = await web3.eth.getAccounts();
-            await this.props.game.methods.coinFlip(isHeads).send({
-                from: accounts[0]
-            });
-            
-            if (isHeads)
+            if (isLandedHeads)
                 this.setState({ landedFace: 'Heads' });
             else
                 this.setState({ landedFace: 'Tails' }); 
@@ -71,12 +57,7 @@ class Flip extends Component {
         catch (err) {
             this.setState({ errorMessage: err.message });
         }
-        if (isHeads)
-            return <CoinAnimation face='heads'></CoinAnimation>;
-        else
-            return <CoinAnimation face='tails'></CoinAnimation>;
     }
-    */
 
     render() {
         return (
@@ -99,7 +80,7 @@ class Flip extends Component {
                 </div>}
                 {this.state.isChosen && <Segment basic align={"center"}>
                     <h1>You Called {this.state.calledFace} </h1>
-                    <CoinAnimation face='tails'></CoinAnimation>
+                    <CoinAnimation face={this.state.landedFace}></CoinAnimation>
                     {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
                 </Segment>}
             </Layout>
