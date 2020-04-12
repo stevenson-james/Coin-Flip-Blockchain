@@ -4,6 +4,5 @@ const routes = require('next-routes')();
 routes
     .add('/games/new', '/games/new')
     .add('/games/:address', '/games/show')
-    .add('/games/:address/flipcoin', '/games/flipcoin')
-    .add('/test', '/test');
+    .add('/games/:address/flipcoin', '/games/flipcoin');
 module.exports = routes;

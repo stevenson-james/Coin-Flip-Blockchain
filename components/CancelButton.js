@@ -25,6 +25,7 @@ class CancelButton extends Component {
             await this.props.game.methods.cancel().send({
                 from: accounts[0]
             });
+            this.setState({ loading: false });
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });

@@ -26,6 +26,7 @@ class JoinButton extends Component {
                 from: accounts[0],
                 value: this.props.value
             });
+            this.setState({ loading: false });
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });

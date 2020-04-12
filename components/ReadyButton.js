@@ -25,6 +25,7 @@ class ReadyButton extends Component {
             await this.props.game.methods.ready().send({
                 from: accounts[0]
             });
+            this.setState({ loading: false });
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });
