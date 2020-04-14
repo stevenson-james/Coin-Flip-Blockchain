@@ -10,7 +10,7 @@ class JoinButton extends Component {
             game: props.game,
             web3: props.web3,
             Router: props.Router,
-            address: props.address
+            //address: props.address
         }
     }
 
@@ -30,7 +30,7 @@ class JoinButton extends Component {
                 value: this.props.value
             });
             this.setState({ loading: false });
-            this.props.Router.pushRoute(`/games/${this.props.address}`);
+            //this.props.Router.pushRoute(`/games/${this.props.address}`);
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });

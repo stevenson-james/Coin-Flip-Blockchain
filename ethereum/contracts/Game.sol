@@ -113,7 +113,8 @@ contract Game{
     }
     
     function getSummary() public view returns (
-        string, uint, address, address, uint, uint, address, bool, bool, address
+        string, uint, address, address, uint, uint, address, bool, 
+        bool, address, bool, bool
     ) {
         return (
             title,
@@ -125,7 +126,9 @@ contract Game{
             flipPlayer,
             choseHeads,
             landedHeads,
-            winner
+            winner,
+            isCompleted,
+            isCancelled
         );
     }
 }

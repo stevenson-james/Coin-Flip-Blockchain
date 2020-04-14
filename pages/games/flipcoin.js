@@ -6,6 +6,7 @@ import Game from '../../ethereum/game';
 import { Link, Router } from '../../routes';
 import CoinAnimation from '../../components/CoinAnimation';
 
+//TODO: add winning message
 class Flip extends Component {
     static async getInitialProps(props) {
         const game = Game(props.query.address);
