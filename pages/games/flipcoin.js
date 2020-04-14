@@ -3,7 +3,7 @@ import { Segment, Button, Message } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import web3 from '../../ethereum/web3';
 import Game from '../../ethereum/game';
-import { Link, Router } from '../../routes';
+import { Link } from '../../routes';
 import CoinAnimation from '../../components/CoinAnimation';
 
 //TODO: add winning message
@@ -29,7 +29,8 @@ class Flip extends Component {
         calledFace: this.props.chosenFace,
         landedFace: '',
         errorMessage: '',
-        loading: false
+        loading: false,
+        isWinner: false
     };
 
     async onChoose (isChosenHeads) {
@@ -44,6 +45,7 @@ class Flip extends Component {
             await this.props.game.methods.coinFlip(isChosenHeads, isLandedHeads).send({
                 from: accounts[0]
             });
+            this.setState({ loading: false });
             this.setState({ isChosen: true });
             if (isChosenHeads)
                 this.setState({ calledFace: 'Heads' });
@@ -54,9 +56,14 @@ class Flip extends Component {
                 this.setState({ landedFace: 'Heads' });
             else
                 this.setState({ landedFace: 'Tails' }); 
+            
+            if (isChosenHeads == isLandedHeads)
+                this.setState({ isWinner: true });
+            else
+                this.setState({ isWinner: false });
         }
         catch (err) {
-            this.setState({ errorMessage: err.message });
+            this.setState({ loading: false, errorMessage: err.message });
         }
     }
 
@@ -67,11 +74,11 @@ class Flip extends Component {
                     <h1 align='center'>Call Your Side!</h1>
                     <Segment basic textAlign={"center"}>
                         <Button.Group size='massive' align='center' widths='5'>
-                            <Button color='red' onClick={() => this.onChoose(true)}>
+                            <Button color='red' onClick={() => this.onChoose(true)} loading={ this.state.loading}>
                                 Heads
                             </Button>
                             <Button.Or />
-                            <Button color='blue' onClick={() => this.onChoose(false)}>
+                            <Button color='blue' onClick={() => this.onChoose(false)} loading={ this.state.loading}>
                                 Tails
                             </Button>
                         </Button.Group>
@@ -80,8 +87,8 @@ class Flip extends Component {
                     </Segment>
                 </div>}
                 {this.state.isChosen && <Segment basic align={"center"}>
-                    <h1>You Called {this.state.calledFace} </h1>
-                    <CoinAnimation face={this.state.landedFace}></CoinAnimation>
+                    <h1>You Called {this.state.calledFace}</h1>
+                    <CoinAnimation face={this.state.landedFace} isWinner={this.state.isWinner} Link={Link}></CoinAnimation>
                     {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
                 </Segment>}
             </Layout>

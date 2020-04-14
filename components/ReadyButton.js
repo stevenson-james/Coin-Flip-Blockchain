@@ -8,7 +8,8 @@ class ReadyButton extends Component {
     static async getInitialProps(props) {
         return{
             game: props.game,
-            web3: props.web3
+            web3: props.web3,
+            Router: props.Router
         }
     }
 
@@ -26,6 +27,7 @@ class ReadyButton extends Component {
                 from: accounts[0]
             });
             this.setState({ loading: false });
+            this.props.Router.pushRoute(`/`);
         }
         catch (err) {
             this.setState({ loading: false, errorMessage: err.message });

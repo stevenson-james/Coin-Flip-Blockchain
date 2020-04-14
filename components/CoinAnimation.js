@@ -1,12 +1,27 @@
-// takes prop of isHeads
+// takes prop of isHeads, isWinner, and Link
 // special thanks to Siva's Vlogs youtube channel for the tutorial assistance
 
 import React, { Component } from 'react';
+import { Button } from 'semantic-ui-react'
 
 class CoinAnimation extends Component {
 
     static async getInitialProps(){
-        return { face: props.face };
+        this.setMessage();
+        return { face: props.face, isWinner: props.isWinner, Link: props.Link };
+    }
+
+    state = {
+        isDelayed: false,
+        isWinner: false
+    }
+
+    setMessage() {
+        setTimeout(() => { 
+            this.setState({ isDelayed: true });
+            if(this.props.isWinner)
+                this.setState({ isWinner: true });
+         }, 10000);
     }
 
     render() {
@@ -20,6 +35,15 @@ class CoinAnimation extends Component {
                     <div className="heads" />
                     <div className="tails" />    
                 </div>}
+                {this.setMessage()}
+                
+                {this.state.isDelayed && this.state.isWinner && <h1>YOU WIN!!!</h1>}
+                {this.state.isDelayed && !this.state.isWinner && <h1>Sorry, you lost</h1>}
+                {this.state.isDelayed &&
+                    <this.props.Link route = '/'>
+                        <a><Button primary>Back to Games</Button></a>
+                    </this.props.Link>
+                }
                 <style jsx>{`
                     .coin {
                         width: 15rem;

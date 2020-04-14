@@ -44,7 +44,8 @@ class GameIndex extends Component {
             const { Row, Cell } = Table;
             return (
                 <Row
-                active={isCompleted || isCancelled}
+                active={isCompleted}
+                negative={isCancelled}
                 positive={readyCount > 1 && !isCompleted}>
                     <Cell>
                         <Link route={`/games/${address}`}>
@@ -61,16 +62,16 @@ class GameIndex extends Component {
                                     address={ address } 
                                     web3={ web3 } 
                                     Router={ Router }></JoinButton></Cell>
-                            <Cell>Game Completed</Cell>
-                            <Cell>Game Completed</Cell>
-                            <Cell>Game Completed</Cell>
+                            <Cell><ReadyButton game={ game } web3={ web3 } Router={ Router }></ReadyButton></Cell>
+                            <Cell><CancelButton game={ game } web3={ web3 } Router={ Router }></CancelButton></Cell>
+                            <Cell>Not Enough Players</Cell>
                         </React.Fragment>
                     }
                     {(readyCount < 2) && (playersCount > 1) && !isCancelled && !isCompleted &&
                         <React.Fragment>
                             <Cell>Game Full</Cell>
-                            <Cell><ReadyButton game={ game } web3={ web3 }></ReadyButton></Cell>
-                            <Cell><CancelButton game={ game } web3={ web3 }></CancelButton></Cell>
+                            <Cell><ReadyButton game={ game } web3={ web3 } Router={ Router }></ReadyButton></Cell>
+                            <Cell><CancelButton game={ game } web3={ web3 } Router={ Router }></CancelButton></Cell>
                             <Cell>Players Not Ready</Cell>
                         </React.Fragment>
                     }
@@ -78,13 +79,21 @@ class GameIndex extends Component {
                         <React.Fragment>
                             <Cell>Game Full</Cell>
                             <Cell>Players Ready</Cell>
-                            <Cell><CancelButton game={ game } web3={ web3 }></CancelButton></Cell>
+                            <Cell><CancelButton game={ game } web3={ web3 } Router={ Router }></CancelButton></Cell>
                             <Cell><Link route={`/games/${address}/flipcoin`}>
                                     <a>
                                         <Button primary>Flip the Coin!</Button>
                                     </a>
                                 </Link>
                             </Cell>
+                        </React.Fragment>
+                    }
+                    {isCancelled &&
+                        <React.Fragment>
+                            <Cell>Game Cancelled</Cell>
+                            <Cell>Game Cancelled</Cell>
+                            <Cell>Game Cancelled</Cell>
+                            <Cell>Game Cancelled</Cell>
                         </React.Fragment>
                     }
                     {isCompleted &&
@@ -106,7 +115,6 @@ class GameIndex extends Component {
             <Layout>
                 <div>
                     <h3>All Games</h3>
-                    
                     <Link route='/games/new'>
                         <a>
                             <Button
@@ -117,6 +125,7 @@ class GameIndex extends Component {
                             />
                         </a>
                     </Link>
+                    <br/><br/>
                     <Table>
                         <Header>
                             <Row>

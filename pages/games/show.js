@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Grid, Button, Message } from 'semantic-ui-react';
+import { Segment, Card, Grid, Button, Message } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 // technically an instance of campaign
 import Game from '../../ethereum/game';
@@ -125,46 +125,17 @@ class GameShow extends Component {
                 <h3>Game Title: '{this.props.title}'</h3>
                 <Grid>
                     <Grid.Row>
-                        <Grid.Column width={10}>
+                        <Grid.Column width={16}>
                             {this.renderCards()}
-                        </Grid.Column>
-
-                        <Grid.Column width={6}>
-                            <Grid.Row>
-                                <Link route={`/games/${this.props.address}/flipcoin`}>
-                                    <a>
-                                        <Button primary>Flip the Coin!</Button>
-                                    </a>
-                                </Link>
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
-                                <CancelButton game={ this.props.game} web3={ web3 } />
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
-                                <Link route={`/`}>
-                                    <a>
-                                        <Button primary>Back</Button>
-                                    </a>
-                                </Link>
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
-                                <JoinButton 
-                                    game={ this.props.game }
-                                    value={this.props.value} 
-                                    address={this.props.address} 
-                                    web3={ web3 } 
-                                    Router={ Router } />
-                            </Grid.Row>
-                            <br />
-                            <Grid.Row>
-                                <ReadyButton game={ this.props.game } web3={ web3 } />
-                            </Grid.Row>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
+                <br/>
+                <Link route={`/`}>
+                    <a>
+                        <Button primary>Back</Button>
+                    </a>
+                </Link>
             </Layout>
         );
     };
