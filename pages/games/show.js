@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Card, Grid, Button, Message } from 'semantic-ui-react';
+import { Segment, Card, Grid, Button } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 // technically an instance of campaign
 import Game from '../../ethereum/game';
@@ -40,6 +40,48 @@ class GameShow extends Component {
         loading: false
     };
 
+    renderP1Wins(items) {
+        items.push(
+            {
+                header: this.props.player1,
+                meta: 'Address of Player1',
+                color: 'green',
+                description: 'Player1 created the game, can cancel the game, ' + 
+                    'and can flip the coin when both players are ready',
+                style: { overflowWrap: 'break-word' }
+            },
+            {
+                header: this.props.player2,
+                meta: 'Address of Player2',
+                color: 'red',
+                description: 'Player2 joined the game, can cancel the game ' + 
+                    'and can flip the coin when both players are ready',
+                style: { overflowWrap: 'break-word' }
+            });
+        return items; 
+    }
+
+    renderP2Wins(items) {
+        items.push(
+            {
+                header: this.props.player1,
+                meta: 'Address of Player1',
+                color: 'red',
+                description: 'Player1 created the game, can cancel the game, ' + 
+                    'and can flip the coin when both players are ready',
+                style: { overflowWrap: 'break-word' }
+            },
+            {
+                header: this.props.player2,
+                meta: 'Address of Player2',
+                color: 'green',
+                description: 'Player2 joined the game, can cancel the game ' + 
+                    'and can flip the coin when both players are ready',
+                style: { overflowWrap: 'break-word' }
+            });
+        return items;
+    }
+
     renderCards() {
         const {
             isCompleted,
@@ -64,24 +106,31 @@ class GameShow extends Component {
             landedValue = 'Heads'
         else
             landedValue = 'Tails'
-
-        const items = [
-            {
-                header: player1,
-                meta: 'Address of Player1',
-                description: 'Player1 created the game, can cancel the game, ' + 
-                    'and can flip the coin when both players are ready',
-                style: { overflowWrap: 'break-word' }
-            }
-        ];
-        if(playersCount > 1)
-            items.push({
-                header: player2,
-                meta: 'Address of Player2',
-                description: 'Player2 joined the game, can cancel the game ' + 
-                    'and can flip the coin when both players are ready',
-                style: { overflowWrap: 'break-word' }
-            });
+        var items = [];
+        if(isCompleted)
+            if (winner == player1)
+                items = this.renderP1Wins(items);
+            else
+                items = this.renderP2Wins(items);
+        else {
+            items = [
+                {
+                    header: player1,
+                    meta: 'Address of Player1',
+                    description: 'Player1 created the game, can cancel the game, ' + 
+                        'and can flip the coin when both players are ready',
+                    style: { overflowWrap: 'break-word' }
+                }
+            ];
+            if(playersCount > 1)
+                items.push({
+                    header: player2,
+                    meta: 'Address of Player2',
+                    description: 'Player2 joined the game, can cancel the game ' + 
+                        'and can flip the coin when both players are ready',
+                    style: { overflowWrap: 'break-word' }
+                });
+        }
         items.push({
                 header: web3.utils.fromWei(value, 'ether') + ' ether',
                 meta: 'Betting Amount',
@@ -94,28 +143,63 @@ class GameShow extends Component {
                 description: 'A player has chosen to cancel the game, meaning ' +
                     'money has been returned to the players involved',
             });
-        else if(isCompleted)
-        items.push({
-            header: flipPlayer,
-            meta: 'Address of Player Who Flipped the Coin',
-            description: 'This player chose the face for the coin flip and ' +
-                'finalized the game',
-            style: { overflowWrap: 'break-word' }
-        },
-        {
-            header: chosenValue + ' / ' + landedValue,
-            meta: 'Chosen Face / Landed Face',
-            description: 'First face is the face called by the player, the second ' +
-                'face is the result of the coin flip',
-        },
-        {
-            header: winner,
-            meta: 'Winner of Coin Toss',
-            description: 'Address of the winner of the coin toss who wins the bet ether',
-            style: { overflowWrap: 'break-word' }
+        else if(isCompleted) {
+            if (player1 == flipPlayer)
+                items.push({
+                    header: 'Player 1',
+                    meta: 'Player Who Flipped the Coin',
+                    description: 'This player chose the face for the coin flip and ' +
+                        'finalized the game',
+                    style: { overflowWrap: 'break-word' }
+                });
+            else
+                items.push({
+                    header: 'Player 2',
+                    meta: 'Player Who Flipped the Coin',
+                    description: 'This player chose the face for the coin flip and ' +
+                        'finalized the game',
+                    style: { overflowWrap: 'break-word' }
+                });
+            if (player1 == winner)
+                items.push({
+                    header: 'Player 1',
+                    meta: 'Winner of Coin Toss',
+                    description: 'Address of the winner of the coin toss who wins the bet',
+                    style: { overflowWrap: 'break-word' }
+                });
+            else
+                items.push({
+                    header: 'Player 2',
+                    meta: 'Winner of Coin Toss',
+                    description: 'Address of the winner of the coin toss who wins the bet',
+                    style: { overflowWrap: 'break-word' }
+                });
+            items.push({});
+            if (choseHeads)
+                items.push({
+                    image: "https://webstockreview.net/images/coin-clipart-dime-6.png",
+                    header: 'Chosen Face',
+                    description: 'The face called by the player'
+                });
+            else
+                items.push({
+                    image: "https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg",
+                    header: 'Chosen Face',
+                    description: 'The face called by the player'
+                });
+            if (landedHeads)
+                items.push({
+                    image: "https://webstockreview.net/images/coin-clipart-dime-6.png",
+                    header: 'Landed Face',
+                    description: 'The face the coin landed on'
+                });
+            else
+                items.push({
+                    image: "https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg",
+                    header: 'Landed Face',
+                    description: 'The face the coin landed on'
+                });
         }
-        );
-
         return < Card.Group items={items} />;
     }
     

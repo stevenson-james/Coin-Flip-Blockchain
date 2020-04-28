@@ -37,7 +37,7 @@ class ReadyButton extends Component {
     render() {
         return (
             <div>
-                <Button primary onClick={ this.onReady } loading={this.state.loading}> Ready Up!</Button>
+                <Button primary onClick={ this.onReady } loading={this.state.loading}> Confirm!</Button>
                 {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
             </div>
         );

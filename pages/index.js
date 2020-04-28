@@ -19,6 +19,7 @@ class GameIndex extends Component {
             games.map(address => { return Game(address).methods.getSummary().call();})
         );
         const accounts = await web3.eth.getAccounts();
+
         return { games, summaries, accounts };
     }
 
@@ -72,13 +73,13 @@ class GameIndex extends Component {
                             <Cell>Game Full</Cell>
                             <Cell><ReadyButton game={ game } web3={ web3 } Router={ Router }></ReadyButton></Cell>
                             <Cell><CancelButton game={ game } web3={ web3 } Router={ Router }></CancelButton></Cell>
-                            <Cell>Players Not Ready</Cell>
+                            <Cell>Players Not Confirmed</Cell>
                         </React.Fragment>
                     }
                     {(readyCount == 2) && !isCancelled && !isCompleted &&
                         <React.Fragment>
                             <Cell>Game Full</Cell>
-                            <Cell>Players Ready</Cell>
+                            <Cell>Both Confirmed</Cell>
                             <Cell><CancelButton game={ game } web3={ web3 } Router={ Router }></CancelButton></Cell>
                             <Cell><Link route={`/games/${address}/flipcoin`}>
                                     <a>
@@ -90,18 +91,18 @@ class GameIndex extends Component {
                     }
                     {isCancelled &&
                         <React.Fragment>
+                            <Cell>Cannot Join</Cell>
+                            <Cell>Cannot Confirm</Cell>
                             <Cell>Game Cancelled</Cell>
-                            <Cell>Game Cancelled</Cell>
-                            <Cell>Game Cancelled</Cell>
-                            <Cell>Game Cancelled</Cell>
+                            <Cell>Cannot Flip</Cell>
                         </React.Fragment>
                     }
                     {isCompleted &&
                         <React.Fragment>
                             <Cell>Game Full</Cell>
-                            <Cell>Game Completed</Cell>
-                            <Cell>Game Completed</Cell>
-                            <Cell>Game Completed</Cell>
+                            <Cell>Both Confirmed</Cell>
+                            <Cell>Cannot Cancel</Cell>
+                            <Cell>Flipped</Cell>
                         </React.Fragment>
                     }
                 </Row>

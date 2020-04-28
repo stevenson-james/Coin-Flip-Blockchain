@@ -61,6 +61,7 @@ contract Game{
     function bet() public payable{
         require(playersCount == 1);
         require(!isCancelled);
+        require(player1 != msg.sender);
         require(msg.value == value);
         player2 = msg.sender;
         playersCount++;

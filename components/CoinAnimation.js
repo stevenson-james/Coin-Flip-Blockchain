@@ -8,7 +8,10 @@ class CoinAnimation extends Component {
 
     static async getInitialProps(){
         this.setMessage();
-        return { face: props.face, isWinner: props.isWinner, Link: props.Link };
+        return { face: props.face, 
+            isWinner: props.isWinner, 
+            Link: props.Link
+         };
     }
 
     state = {
@@ -46,8 +49,8 @@ class CoinAnimation extends Component {
                 }
                 <style jsx>{`
                     .coin {
-                        width: 15rem;
-                        height: 15rem;
+                        width: 20rem;
+                        height: 20rem;
                         transform-style: preserve-3d;
                     }
                     
@@ -66,7 +69,7 @@ class CoinAnimation extends Component {
                     }
 
                     .coin .tails {
-                        background-image: url("https://clipart.printcolorcraft.com/wp-content/uploads/quarter/quarter%20tails%20clipart%201.jpg");
+                        background-image: url("https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg");
                         background-size: contain;
                         transform: rotateY(-180deg);
                     }
