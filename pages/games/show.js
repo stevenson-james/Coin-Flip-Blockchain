@@ -5,9 +5,7 @@ import Layout from '../../components/Layout';
 import Game from '../../ethereum/game';
 import web3 from '../../ethereum/web3';
 import { Link, Router } from '../../routes';
-import JoinButton from '../../components/JoinButton';
-import ReadyButton from '../../components/ReadyButton'
-import CancelButton from '../../components/CancelButton';
+import fetch from 'node-fetch';
 
 class GameShow extends Component {
     static async getInitialProps(props) {
@@ -17,8 +15,12 @@ class GameShow extends Component {
 
         const summary = await game.methods.getSummary().call();
 
+        const res = await fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD');
+        const resJson = await res.json();
+        const conversion = await resJson.USD;
+
         return{
-            game: game,
+            game,
             address: props.query.address,
             isCompleted: await game.methods.isCompleted().call(),
             isCancelled: await game.methods.isCancelled().call(),
@@ -31,7 +33,8 @@ class GameShow extends Component {
             flipPlayer: summary[6],
             choseHeads: summary[7],
             landedHeads: summary[8],
-            winner: summary[9]
+            winner: summary[9],
+            conversion
         };
     }
 
@@ -132,10 +135,15 @@ class GameShow extends Component {
                 });
         }
         items.push({
-                header: web3.utils.fromWei(value, 'ether') + ' ether',
-                meta: 'Betting Amount',
+                header: web3.utils.fromWei(value, 'ether'),
+                meta: 'Betting Amount (Ether)',
                 description: 'Amount each player must/has bet on the coin flip and ' +
-                    'amount to be won',
+                    'amount to be won, in ether'
+            },
+            {
+                header: '$' + (this.props.conversion * web3.utils.fromWei(value, 'ether')).toFixed(2),
+                meta: 'Betting Amount (USD)',
+                description: 'Betting amount based on current conversion'
             });
         if(isCancelled)
             items.push({
@@ -174,7 +182,6 @@ class GameShow extends Component {
                     description: 'Address of the winner of the coin toss who wins the bet',
                     style: { overflowWrap: 'break-word' }
                 });
-            items.push({});
             if (choseHeads)
                 items.push({
                     image: "https://webstockreview.net/images/coin-clipart-dime-6.png",

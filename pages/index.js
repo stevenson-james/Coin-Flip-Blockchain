@@ -8,6 +8,7 @@ import { Link, Router } from '../routes';
 import ReadyButton from '../components/ReadyButton';
 import CancelButton from '../components/CancelButton';
 import JoinButton from '../components/JoinButton';
+import fetch from 'node-fetch';
 
 class GameIndex extends Component {
 
@@ -19,8 +20,11 @@ class GameIndex extends Component {
             games.map(address => { return Game(address).methods.getSummary().call();})
         );
         const accounts = await web3.eth.getAccounts();
-
-        return { games, summaries, accounts };
+        const res = await fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD');
+        const resJson = await res.json();
+        const conversion = await resJson.USD;
+        
+        return { games, summaries, accounts, conversion };
     }
 
     renderGames() {
@@ -41,6 +45,7 @@ class GameIndex extends Component {
             const isCancelled = summary[11];
             const address = this.props.games[i];
             const game = Game(this.props.games[i]);
+            const conversion = this.props.conversion;
 
             const { Row, Cell } = Table;
             return (
@@ -53,7 +58,7 @@ class GameIndex extends Component {
                             <a>{title}</a>
                         </Link>
                     </Cell>
-                    <Cell>{web3.utils.fromWei(value, 'ether') + ' ether'}</Cell>
+                    <Cell>${(conversion * web3.utils.fromWei(value, 'ether')).toFixed(2)}</Cell>
                     <Cell>{readyCount + '/' + playersCount}</Cell>
                     {playersCount < 2 &&
                         <React.Fragment>
