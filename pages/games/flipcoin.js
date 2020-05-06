@@ -82,8 +82,7 @@ class Flip extends Component {
                                 Tails
                             </Button>
                         </Button.Group>
-                        {this.state.errorMessage && <Message 
-                            error header='Oops!' content={this.state.errorMessage} />}
+                        {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
                     </Segment>
                 </div>}
                 {this.state.isChosen && <Segment basic align={"center"}>

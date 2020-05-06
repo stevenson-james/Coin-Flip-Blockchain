@@ -15,6 +15,7 @@ class CancelButton extends Component {
 
     state = {
         errorMessage: '',
+        statusMessage: '',
         loading: false
     };
 
@@ -22,15 +23,18 @@ class CancelButton extends Component {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
         try {
+            this.setState({ statusMessage: 'Getting account from MetaMask'});
             const accounts = await this.props.web3.eth.getAccounts();
+            this.setState({ statusMessage: 'Awaiting smart contract completion on blockchain to cancel'});
             await this.props.game.methods.cancel().send({
                 from: accounts[0]
             });
             this.setState({ loading: false });
+            this.setState({ statusMessage: 'Game cancelled on blockchain'});
             this.props.Router.pushRoute(`/`);
         }
         catch (err) {
-            this.setState({ loading: false, errorMessage: err.message });
+            this.setState({ loading: false, errorMessage: err.message, statusMessage: '' });
         }
     }
 
@@ -38,7 +42,8 @@ class CancelButton extends Component {
         return (
             <div>
                 <Button primary onClick={ this.onCancel } loading={this.state.loading}> Cancel Game </Button>
-                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
+                {this.state.statusMessage && <Message header='Status' content={this.state.statusMessage} />}
+                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage.substring(0, 100)} />}
             </div>
         );
     }

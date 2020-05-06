@@ -184,25 +184,25 @@ class GameShow extends Component {
                 });
             if (choseHeads)
                 items.push({
-                    image: "https://webstockreview.net/images/coin-clipart-dime-6.png",
+                    image: 'https://webstockreview.net/images/coin-clipart-dime-6.png',
                     header: 'Chosen Face',
                     description: 'The face called by the player'
                 });
             else
                 items.push({
-                    image: "https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg",
+                    image: 'https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg',
                     header: 'Chosen Face',
                     description: 'The face called by the player'
                 });
             if (landedHeads)
                 items.push({
-                    image: "https://webstockreview.net/images/coin-clipart-dime-6.png",
+                    image: 'https://webstockreview.net/images/coin-clipart-dime-6.png',
                     header: 'Landed Face',
                     description: 'The face the coin landed on'
                 });
             else
                 items.push({
-                    image: "https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg",
+                    image: 'https://cdn.clipart.email/b6f9846cc40047b4b19009917b239936_quarter-tails-clipart_1208-1202.jpeg',
                     header: 'Landed Face',
                     description: 'The face the coin landed on'
                 });

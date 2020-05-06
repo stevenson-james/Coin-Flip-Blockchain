@@ -15,6 +15,7 @@ class JoinButton extends Component {
 
     state = {
         errorMessage: '',
+        statusMessage: '',
         loading: false
     };
 
@@ -22,16 +23,19 @@ class JoinButton extends Component {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
         try {
+            this.setState({ statusMessage: 'Getting account from MetaMask'});
             const accounts = await this.props.web3.eth.getAccounts();
+            this.setState({ statusMessage: 'Awaiting smart contract completion on blockchain to join game'});
             await this.props.game.methods.bet().send({
                 from: accounts[0],
                 value: this.props.value
             });
             this.setState({ loading: false });
+            this.setState({ statusMessage: 'Player added to game on blockchain'});
             this.props.Router.pushRoute(`/`);
         }
         catch (err) {
-            this.setState({ loading: false, errorMessage: err.message });
+            this.setState({ loading: false, errorMessage: err.message, statusMessage: '' });
         }
     }
 
@@ -39,7 +43,8 @@ class JoinButton extends Component {
         return (
             <div>
                 <Button primary onClick={this.onJoin} loading={this.state.loading}> Join the Game!</Button>
-                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
+                {this.state.statusMessage && <Message header='Status' content={this.state.statusMessage} />}
+                {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage.substring(0, 100)} />}
             </div>
         );
     }

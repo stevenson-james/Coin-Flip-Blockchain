@@ -139,7 +139,7 @@ class GameIndex extends Component {
                                 <HeaderCell>Buy In Value</HeaderCell>
                                 <HeaderCell>Ready Players</HeaderCell>
                                 <HeaderCell>Join Game</HeaderCell>
-                                <HeaderCell>Ready Up</HeaderCell>
+                                <HeaderCell>Confirm Game</HeaderCell>
                                 <HeaderCell>Cancel Game</HeaderCell>
                                 <HeaderCell>Flip Coin</HeaderCell>
                             </Row>
