@@ -10,6 +10,7 @@ class GameNew extends Component {
         bettingAmount: '',
         gameTitle: '',
         errorMessage: '',
+        statusMessage: '',
         loading: false
     };
 
@@ -21,7 +22,9 @@ class GameNew extends Component {
             if (!this.state.gameTitle.match(/^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/)){
                 throw 'Must include a title (no special characters)';
             }
+            this.setState({ statusMessage: 'Getting account from MetaMask'});
             const accounts = await web3.eth.getAccounts();
+            this.setState({ statusMessage: 'Awaiting smart contract completion on blockchain to create and join game'});
             await factory.methods
                 // bettingAmount inputted as ether, but converted to wei
                 .createGame(this.state.gameTitle, web3.utils.toWei(this.state.bettingAmount, 'ether'))
@@ -29,10 +32,11 @@ class GameNew extends Component {
                     from: accounts[0],
                     value: web3.utils.toWei(this.state.bettingAmount, 'ether')
                 });
-            
+            this.setState({ statusMessage: 'Game created and joined on blockchain'});
             Router.pushRoute('/');
         }
         catch (err) {
+            this.setState({ statusMessage: '' });
             if (err.message != null)
                 this.setState({ errorMessage: err.message });
             else
@@ -69,6 +73,7 @@ class GameNew extends Component {
                     />
                 </Form.Field>
                 <Message error header='Oops!' content = {this.state.errorMessage} />
+                {this.state.statusMessage && <Message positive header='Status' content={this.state.statusMessage} />}
                 <Button primary loading={this.state.loading}>Create!</Button>
             </Form>
         </Layout>

@@ -43,7 +43,7 @@ class JoinButton extends Component {
         return (
             <div>
                 <Button primary onClick={this.onJoin} loading={this.state.loading}> Join the Game!</Button>
-                {this.state.statusMessage && <Message header='Status' content={this.state.statusMessage} />}
+                {this.state.statusMessage && <Message positive header='Status' content={this.state.statusMessage} />}
                 {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage.substring(0, 100)} />}
             </div>
         );

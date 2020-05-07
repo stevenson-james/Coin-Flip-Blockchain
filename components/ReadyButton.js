@@ -42,7 +42,7 @@ class ReadyButton extends Component {
         return (
             <div>
                 <Button primary onClick={ this.onReady } loading={this.state.loading}> Confirm!</Button>
-                {this.state.statusMessage && <Message header='Status' content={this.state.statusMessage} />}
+                {this.state.statusMessage && <Message positive header='Status' content={this.state.statusMessage} />}
                 {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage.substring(0, 100)} />}
             </div>
         );

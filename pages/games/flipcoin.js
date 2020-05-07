@@ -29,6 +29,7 @@ class Flip extends Component {
         calledFace: this.props.chosenFace,
         landedFace: '',
         errorMessage: '',
+        statusMessage: '',
         loading: false,
         isWinner: false
     };
@@ -37,16 +38,18 @@ class Flip extends Component {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });
         try {
+            this.setState({ statusMessage: 'Getting account from MetaMask'});
             const accounts = await web3.eth.getAccounts();
             // randomNum between 0 and 1
             const randomNum = Math.random();
             const isLandedHeads = randomNum > .5;
 
+            this.setState({ statusMessage: 'Awaiting smart contract completion on blockchain to confirm flip'});
             await this.props.game.methods.coinFlip(isChosenHeads, isLandedHeads).send({
                 from: accounts[0]
             });
             this.setState({ loading: false });
-            this.setState({ isChosen: true });
+            this.setState({ isChosen: true, statusMessage: 'Displaying results of coin flip' });
             if (isChosenHeads)
                 this.setState({ calledFace: 'Heads' });
             else
@@ -63,7 +66,7 @@ class Flip extends Component {
                 this.setState({ isWinner: false });
         }
         catch (err) {
-            this.setState({ loading: false, errorMessage: err.message });
+            this.setState({ loading: false, errorMessage: err.message, statusMessage: '' });
         }
     }
 
@@ -82,6 +85,7 @@ class Flip extends Component {
                                 Tails
                             </Button>
                         </Button.Group>
+                        {this.state.statusMessage && <Message positive header='Status' content={this.state.statusMessage} />}
                         {this.state.errorMessage && <Message error header='Oops!' content={this.state.errorMessage} />}
                     </Segment>
                 </div>}
