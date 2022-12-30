@@ -13,7 +13,7 @@
     "fs-extra": "^9.0.0",
     "ganache-cli": "^6.9.1",
     "jquery": "^3.5.0",
-    "mocha": "^7.1.1",
+    "mocha": "^10.2.0",
     "next": "^4.1.4",
     "next-routes": "^1.4.2",
     "node-fetch": "^2.6.0",
